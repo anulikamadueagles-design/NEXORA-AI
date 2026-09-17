@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#050509">
+  <meta name="description" content="NEXORA — Advanced Neural Intelligence by Vectors Element Tech">
+  <link rel="manifest" href="/manifest.json">
+  <title>NEXORA — Advanced Neural Intelligence</title>
+  <link rel="stylesheet" href="/style.css?v=nexora4">
+</head>
+<body>
+  <div class="space"></div>
+  <div class="scan"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-core"><span></span></div>
+      <div><b>NEXORA</b><small>ADVANCED NEURAL INTELLIGENCE</small></div>
+    </div>
+    <div class="status"><i></i> CORE ONLINE</div>
+    <button class="ghost" id="settingsBtn">⚙ Settings</button>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <span class="eyebrow">VECTORS ELEMENT TECH</span>
+        <h1>Meet <em>NEXORA</em></h1>
+        <p>A futuristic multimodal AI workspace for conversation, coding, research, creation and intelligent assistance.</p>
+        <div class="hero-actions">
+          <button class="primary" onclick="focusChat()">Initialize NEXORA</button>
+          <button class="secondary" onclick="openLab('code')">Open Coding Lab</button>
+        </div>
+      </div>
+
+      <div class="holo-stage" aria-label="NEXORA holographic AI core">
+        <div class="hud hud-a">NEURAL MATRIX<br><strong>98.7%</strong></div>
+        <div class="hud hud-b">MULTIMODAL<br><strong>ONLINE</strong></div>
+        <div class="hud hud-c">CORE LINK<br><strong>SECURE</strong></div>
+        <div class="orbit o1"></div><div class="orbit o2"></div><div class="orbit o3"></div><div class="orbit o4"></div>
+        <div class="beam"></div>
+        <div class="core">
+          <div class="core-inner">N</div>
+          <span class="energy e1"></span><span class="energy e2"></span><span class="energy e3"></span>
+        </div>
+        <div class="core-label">NEXORA CORE</div>
+      </div>
+    </section>
+
+    <section class="workspace">
+      <aside class="sidebar">
+        <button class="side active" onclick="showPanel('chat',this)">◈ Chat</button>
+        <button class="side" onclick="showPanel('code',this)">⌘ Coding Lab</button>
+        <button class="side" onclick="showPanel('search',this)">⌕ Web Search</button>
+        <button class="side" onclick="showPanel('image',this)">✦ Image Forge</button>
+        <button class="side" onclick="showPanel('video',this)">▶ Video Lab</button>
+        <button class="side" onclick="showPanel('assistant',this)">◉ Assistant</button>
+        <div class="side-note">Creator<br><strong>David Kamsi Elvis</strong></div>
+      </aside>
+
+      <section class="panel-wrap">
+        <div id="chatPanel" class="panel active">
+          <div class="panel-head"><div><h2>NEXORA Chat</h2><span>Ask, create, explain, plan or code.</span></div>
+            <select id="model"><option value="gemini-2.5-flash">Gemini Flash</option><option value="gemini-2.0-flash">Gemini 2 Flash</option></select>
+          </div>
+          <div id="messages" class="messages">
+            <div class="msg ai"><div class="avatar">N</div><div><b>NEXORA</b><p>Neural system online. What would you like to create?</p></div></div>
+          </div>
+          <div class="composer">
+            <input id="chatInput" placeholder="Message NEXORA..." autocomplete="off">
+            <input id="fileInput" type="file" hidden>
+            <button class="icon" onclick="document.getElementById('fileInput').click()">＋</button>
+            <button class="icon" id="voiceBtn">🎙</button>
+            <button class="send" onclick="sendMessage()">➤</button>
+          </div>
+        </div>
+
+        <div id="codePanel" class="panel">
+          <div class="panel-head"><div><h2>Coding Lab</h2><span>Generate and preview web code.</span></div><button class="secondary" onclick="runCode()">Run Preview</button></div>
+          <textarea id="codeInput" spellcheck="false"><!doctype html>
+<html><body style="background:#050509;color:white;font-family:system-ui;text-align:center;padding:40px"><h1>NEXORA</h1><p>Neural interface online.</p></body></html></textarea>
+          <iframe id="preview" sandbox="allow-scripts"></iframe>
+        </div>
+
+        <div id="searchPanel" class="panel">
+          <div class="panel-head"><div><h2>Web Search</h2><span>DuckDuckGo-powered search gateway.</span></div></div>
+          <div class="searchbar"><input id="searchInput" placeholder="Search the web..."><button class="primary" onclick="searchWeb()">Search</button></div>
+          <div id="searchResults" class="results"></div>
+        </div>
+
+        <div id="imagePanel" class="panel">
+          <div class="panel-head"><div><h2>Image Forge</h2><span>Create an image from a text prompt.</span></div></div>
+          <div class="searchbar"><input id="imagePrompt" placeholder="A cinematic NEXORA hologram in deep space..."><button class="primary" onclick="generateImage()">Generate</button></div>
+          <div id="imageResult" class="media-result"></div>
+        </div>
+
+        <div id="videoPanel" class="panel">
+          <div class="panel-head"><div><h2>Video Lab</h2><span>Video-generation gateway ready for a provider.</span></div></div>
+          <div class="searchbar"><input id="videoPrompt" placeholder="Describe your video..."><button class="primary" onclick="generateVideo()">Create Job</button></div>
+          <div id="videoResult" class="media-result"></div>
+        </div>
+
+        <div id="assistantPanel" class="panel">
+          <div class="panel-head"><div><h2>AI Assistant</h2><span>Your command center.</span></div></div>
+          <div class="cards">
+            <button class="card" onclick="quick('Create a task plan for my project')">✓ Tasks<small>Planning and checklists</small></button>
+            <button class="card" onclick="quick('Help me write a professional email')">✉ Email<small>Draft messages</small></button>
+            <button class="card" onclick="quick('Explain this topic simply')">◎ Study<small>Learn and explain</small></button>
+            <button class="card" onclick="quick('Translate this into English')">文 Translate<small>Multilingual help</small></button>
+          </div>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <footer>© 2026 NEXORA · Created by David Kamsi Elvis · Vectors Element Tech</footer>
+  <script src="/script.js?v=nexora4"></script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+{
+  "name":"NEXORA — Advanced Neural Intelligence",
+  "short_name":"NEXORA",
+  "start_url":"/",
+  "display":"standalone",
+  "background_color":"#030308",
+  "theme_color":"#050509",
+  "description":"Futuristic AI workspace by Vectors Element Tech",
+  "icons":[]
+}
