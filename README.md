@@ -1,21 +1,9 @@
-# NEXORA — Advanced Neural Intelligence
+# NEXORA — Neon Ultra
 
-Created by **David Kamsi Elvis** · **Vectors Element Tech**
+Rebuilt to match the supplied futuristic reference: black space, intense red/gold/electric-blue/green neon, holographic AI core, HUDs and glowing feature cards.
 
-## GitHub + Render deployment
+Upload all files directly to the root of the **NEXORA-AI** GitHub repository. Commit to `main`. Use the existing Render service.
 
-1. Upload **all files directly into the root of your existing GitHub repository**.
-2. Do not put them inside another folder.
-3. Commit to the `main` branch.
-4. Your existing Render Web Service should redeploy automatically.
-5. In Render → Environment, add:
-   - `GEMINI_API_KEY` = your Gemini API key
-   - Optional: `VIDEO_PROVIDER_URL` for a compatible video-generation gateway.
-6. Render build command:
-   `pip install -r requirements.txt`
-7. Render start command:
-   `uvicorn server:app --host 0.0.0.0 --port $PORT`
-
-The frontend uses cache-busting query versions (`?v=nexora4`) so the new design is easier to distinguish from an older deployment.
-
-This release is a strong full-stack foundation. Real authentication, persistent cloud memory/database, production file storage, distributed video rendering, collaboration, payments and provider-specific AI pipelines still require their respective services/credentials.
+Render build: `pip install -r requirements.txt`
+Render start: `uvicorn server:app --host 0.0.0.0 --port $PORT`
+Environment: `GEMINI_API_KEY`

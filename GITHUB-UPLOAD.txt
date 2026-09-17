@@ -1,24 +1,13 @@
-NEXORA UPLOAD INSTRUCTIONS
+Upload these files directly to the root of NEXORA-AI:
+index.html
+style.css
+script.js
+server.py
+requirements.txt
+manifest.json
+README.md
+GITHUB-UPLOAD.txt
 
-1. Open the EXISTING GitHub repository used by the current AI website.
-2. Upload these files directly into the repository ROOT:
-   index.html
-   style.css
-   script.js
-   server.py
-   requirements.txt
-   manifest.json
-   README.md
-   GITHUB-UPLOAD.txt
-3. Do NOT create a NEXORA folder inside the repository.
-4. Commit to main.
-5. Use the EXISTING Render Web Service. Do NOT create a new Render service.
-6. In Render Environment Variables, set GEMINI_API_KEY.
-7. Wait for the deployment to finish.
-8. Open the existing website URL and hard-refresh Chrome if the old page is still cached.
+Commit message: Replace NEXORA frontend with Neon Ultra design
 
-New branding:
-NEXORA
-Advanced Neural Intelligence
-Created by David Kamsi Elvis
-Vectors Element Tech
+Then wait for the existing Render service to redeploy. If Chrome shows the old page, clear the site's data and reopen it.
