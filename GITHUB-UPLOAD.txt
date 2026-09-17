@@ -1,13 +1,22 @@
-Upload these files directly to the root of NEXORA-AI:
+NEXORA v2 — GITHUB MOBILE UPLOAD
+
+1. Open the NEXORA-AI repository.
+2. Upload/replace ALL files from this ZIP at the repository ROOT.
+3. Do NOT create an extra NEXORA folder inside the repository.
+4. Commit message: Fix NEXORA frontend, static files and Render API
+5. Commit changes.
+6. Render should automatically redeploy.
+7. Wait for the deploy to show Live.
+8. Open the NEXORA Render URL in Chrome and refresh the page.
+
+Files:
 index.html
 style.css
 script.js
 server.py
 requirements.txt
 manifest.json
+render.yaml
+.gitignore
 README.md
 GITHUB-UPLOAD.txt
-
-Commit message: Replace NEXORA frontend with Neon Ultra design
-
-Then wait for the existing Render service to redeploy. If Chrome shows the old page, clear the site's data and reopen it.
