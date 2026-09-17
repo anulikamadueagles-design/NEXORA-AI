@@ -9,14 +9,16 @@ from pydantic import BaseModel, Field
 APP_DIR = os.path.dirname(os.path.abspath(__file__))
 KEY = os.getenv("GEMINI_API_KEY", "").strip()
 VIDEO = os.getenv("VIDEO_PROVIDER_URL", "").strip()
+DEFAULT_MODEL = os.getenv("GEMINI_MODEL", "gemini-3.6-flash").strip() or "gemini-3.6-flash"
 
-app = FastAPI(title="NEXORA — Advanced Neural Intelligence", version="2.0.0")
+app = FastAPI(title="NEXORA — Advanced Neural Intelligence", version="3.0.0")
 
 
 class Chat(BaseModel):
     message: str
     history: list[dict] = Field(default_factory=list)
-    model: str = "gemini-2.5-flash"
+    interaction_id: str | None = None
+    model: str = DEFAULT_MODEL
 
 
 class Vid(BaseModel):
@@ -27,8 +29,6 @@ def local_file(name: str) -> str:
     return os.path.join(APP_DIR, name)
 
 
-# Explicit static-file routes are important on Render/FastAPI. Without these,
-# index.html can load while style.css and script.js return 404.
 @app.get("/style.css")
 async def css():
     return FileResponse(local_file("style.css"), media_type="text/css")
@@ -46,7 +46,13 @@ async def manifest():
 
 @app.get("/health")
 async def health():
-    return {"status": "ok", "app": "NEXORA", "version": "2.0.0", "gemini_configured": bool(KEY)}
+    return {
+        "status": "ok",
+        "app": "NEXORA",
+        "version": "3.0.0",
+        "gemini_configured": bool(KEY),
+        "gemini_model": DEFAULT_MODEL,
+    }
 
 
 @app.get("/")
@@ -56,56 +62,67 @@ async def home():
 
 @app.post("/api/chat")
 async def chat(x: Chat):
-    if not x.message.strip():
+    message = x.message.strip()
+    if not message:
         raise HTTPException(400, "Message cannot be empty.")
     if not KEY:
         raise HTTPException(503, "GEMINI_API_KEY is not configured on the server.")
 
-    contents = []
-    for h in x.history[-20:]:
-        role = "user" if h.get("role") == "user" else "model"
-        text = str(h.get("text", "")).strip()
-        if text:
-            contents.append({"role": role, "parts": [{"text": text}]})
-    contents.append({"role": "user", "parts": [{"text": x.message.strip()}]})
+    # Gemini's current recommended API for new applications is Interactions API.
+    # It supports server-side conversation state via previous_interaction_id.
+    model = x.model.strip() or DEFAULT_MODEL
+    if model.startswith("models/"):
+        model = model.removeprefix("models/")
 
-    model = x.model.strip() or "gemini-2.5-flash"
-    url = (
-        "https://generativelanguage.googleapis.com/v1beta/models/"
-        f"{urllib.parse.quote(model, safe='')}:generateContent"
-    )
     payload = {
-        "contents": contents,
-        "systemInstruction": {
-            "parts": [{
-                "text": (
-                    "You are NEXORA, an advanced helpful AI created by David Kamsi Elvis "
-                    "at Vectors Element Tech. Be accurate, clear and useful."
-                )
-            }]
-        },
-        "generationConfig": {"temperature": 0.7},
+        "model": model,
+        "input": message,
+        "system_instruction": (
+            "You are NEXORA, an advanced multimodal AI created by David Kamsi Elvis "
+            "at Vectors Element Tech. Be accurate, practical, concise when appropriate, "
+            "and helpful. Never claim a tool was used unless it was actually used."
+        ),
+        "generation_config": {"temperature": 0.7},
     }
+    if x.interaction_id:
+        payload["previous_interaction_id"] = x.interaction_id
+
+    url = "https://generativelanguage.googleapis.com/v1beta/interactions"
+    headers = {"Content-Type": "application/json", "x-goog-api-key": KEY}
 
     try:
         async with httpx.AsyncClient(timeout=90, follow_redirects=True) as client:
-            response = await client.post(url, params={"key": KEY}, json=payload)
+            response = await client.post(url, headers=headers, json=payload)
+
         if response.status_code >= 400:
             try:
                 detail = response.json().get("error", {}).get("message") or response.text
             except Exception:
                 detail = response.text
-            raise HTTPException(response.status_code, detail[:1200])
+            raise HTTPException(response.status_code, detail[:1600])
 
         data = response.json()
-        candidates = data.get("candidates") or []
-        if not candidates:
-            raise HTTPException(502, "NEXORA received no response from Gemini.")
-        parts = candidates[0].get("content", {}).get("parts", [])
-        reply = "\n".join(str(p.get("text", "")) for p in parts if p.get("text"))
+        reply = str(data.get("output_text") or "").strip()
         if not reply:
-            raise HTTPException(502, "Gemini returned an empty response.")
-        return {"reply": reply}
+            # Current REST responses expose model output in steps. Keep this fallback
+            # for responses where output_text is not populated.
+            for step in reversed(data.get("steps") or []):
+                if step.get("type") == "model_output":
+                    for item in step.get("content") or []:
+                        if item.get("type") == "text" and item.get("text"):
+                            reply = str(item["text"]).strip()
+                            break
+                if reply:
+                    break
+
+        if not reply:
+            raise HTTPException(502, "NEXORA received an empty response from Gemini.")
+
+        return {
+            "reply": reply,
+            "interaction_id": data.get("id"),
+            "model": model,
+        }
     except HTTPException:
         raise
     except httpx.HTTPError as exc:

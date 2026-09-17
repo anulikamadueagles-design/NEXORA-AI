@@ -1,15 +1,6 @@
-NEXORA v2 — GITHUB MOBILE UPLOAD
+NEXORA v3 FIX
 
-1. Open the NEXORA-AI repository.
-2. Upload/replace ALL files from this ZIP at the repository ROOT.
-3. Do NOT create an extra NEXORA folder inside the repository.
-4. Commit message: Fix NEXORA frontend, static files and Render API
-5. Commit changes.
-6. Render should automatically redeploy.
-7. Wait for the deploy to show Live.
-8. Open the NEXORA Render URL in Chrome and refresh the page.
-
-Files:
+Upload these files directly to the ROOT of the NEXORA-AI repository:
 index.html
 style.css
 script.js
@@ -17,6 +8,8 @@ server.py
 requirements.txt
 manifest.json
 render.yaml
-.gitignore
 README.md
 GITHUB-UPLOAD.txt
+
+Commit message:
+Fix NEXORA adaptive UI and Gemini Interactions API

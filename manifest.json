@@ -1,1 +1,11 @@
-{"name":"NEXORA — Advanced Neural Intelligence","short_name":"NEXORA","start_url":"/","display":"standalone","background_color":"#02030a","theme_color":"#02030a"}
+{
+  "name": "NEXORA — Advanced Neural Intelligence",
+  "short_name": "NEXORA",
+  "description": "Advanced Neural Intelligence by Vectors Element Tech",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#02040a",
+  "theme_color": "#03050b",
+  "orientation": "any",
+  "icons": []
+}
